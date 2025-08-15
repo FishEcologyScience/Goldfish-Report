@@ -1,0 +1,121 @@
+---
+title: "Goldfish_Summary_1"
+author: "Paul Bzonek with Cole MacLeod"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intro
+
+Hey all,
+
+Cole has been making great progress on the goldfish work, and we're at a point where we need to make some decisions about the model equations moving forward. I'll also use this summary to present a bit of the background data to help contextualize our next steps.
+
+------------------------------------------------------------------------
+
+## Step 1: Lorenzoni et al. 2010 Equations
+
+We start with the Lorenzoni et al. 2010 equations that allow us to convert goldfish length into:
+
+-   **Estimated Age**
+
+-   **Estimated Fecundity**
+
+```{r Length decundity, echo=FALSE, warning=FALSE, message=FALSE}
+ggplotly(plots$LengthFecundity)
+```
+
+The figure above shows age and fecundity across length. We see that fecundity increases dramatically with length, but fish growth also slows down such that age classes catch-up to each other at large sizes.
+
+------------------------------------------------------------------------
+
+## Step 2: Length-width relationship
+
+Our report focuses on fecundity at body width, but our fecundity estimates are based on body length. When examining the relationship between length and width, we observed a non-linear pattern---likely sigmoidal in shape---with growth in length tapering off as fish approach their maximum size.
+
+Cole and I both explored options to model this curve more precisely, but given that this relationship is not central to our analyses, it's probably not worth the additional effort to refine the model further. At the moment I have fit a linear relationship between the two.
+
+```{r length width, echo=FALSE, warning=FALSE, message=FALSE}
+ggplotly(plots$LengthWidth)
+```
+
+------------------------------------------------------------------------
+
+## Step 3: Model fecundity with width
+
+Using our Grindstone goldfish, we can model the relationship between goldfish width and predicted fecundity. The curve we fit to this relationship has important implications for our papers' results. I had expected a non-linear relationship, and Cole fit a number of curves to the data. However, when looking at the raw data we do not see a strong non-linear slope when ignoring widths below 25 mm.
+
+```{r fecundity data, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(data1, aes(x = width_mm, y = pred_eggs)) +
+ geom_point(alpha = 0.5)
+```
+
+-   After assigning a number of curves to the fit (*panel 1*), it became clear that the exponential nls model was a poor match.
+
+-   The remaining models appear reasonable, though the lm is a little worse than the log and sqrt models (*panel 2*).
+
+-   When looking at the predictions, we see that the log and sqrt models predict negative eggs at a body width of 30 mm. The linear model does predict positive fecundity at a 30 mm width.
+
+-   FOr now, I have moved forward with a linear model.
+
+```{r fecundity model, echo=FALSE, warning=FALSE, message=FALSE}
+print(oldplots$combined1)
+```
+
+------------------------------------------------------------------------
+
+## Use batch data to consider demographics
+
+We can use the batch data to develop rough demographic estimates of the goldfish populations.
+
+1.  The batch data assigned fish into tail length bins. We need continuous data, so I randomized lengths within each bin range.
+
+2.  I then predicted width from tail length
+
+3.  This approach allows us to combine the \~ 440 batch fish with the \~180 individual-fish measurements. The combined dataset should be large enough for us to consider it as representative of the size structure in Grindstone Creek.
+
+4.  I then calculated how many eggs would be produced by the batch fish.
+
+-   Notes to consider:
+
+    -   The age predictions will be refined after the otolith contract
+
+    -   Tail lengths have been randomly assigned within each batch bin, which adds some noise
+
+    -   Widths have been predicted from randomized lengths so we are multiplying noise...
+
+    -   Fecundity is assigned to all goldfish as we have no sex data.
+
+```{r histograms, echo=FALSE, warning=FALSE, message=FALSE}
+print(plots$combined2)
+```
+
+------------------------------------------------------------------------
+
+## Plot cumulative egg passage
+
+Now that we have associated Goldfish length, width, age, and fecundity together, and have captured demographic data on goldfish morphology, we can predict the cumulative number of eggs that pass a barrier of a given width.
+
+The plot below is very busy, and would be cleaned up in a final report.
+
+-   The red line displays the cumulative proportion of eggs that can pass a barrier of a given width spacing
+
+-   The vertical grey bars represent age classes associated with given widths
+
+-   The vertical black bars represent the 30, 40, and 50 mm widths that we had previously discussed as cutoff widths. All three widths fall between y2 and y3 age classes.
+
+-   Looking ahead, there is potential to expand the graph by incorporating age-class data for target native species
+
+```{r cumulative curve, echo=FALSE, warning=FALSE, message=FALSE}
+ggplotly(plots$CumulativeEggCurve)
+```
+
+------------------------------------------------------------------------
+
+## Closing
+
+I have taken liberties with this analysis. Nonetheless, I think these outputs are promising and help demonstrate that multiple aspects of goldfish morphology and demographics can be linked to inform barrier design.

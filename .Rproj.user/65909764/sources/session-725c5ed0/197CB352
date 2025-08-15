@@ -1,0 +1,27 @@
+{
+    "id": "197CB352",
+    "path": "~/04 - R Working Directory/03 - GitHub Desktop/Goldfish-Report/02 - Scripts/01 - Functions/func1-1_Lorenzoni_Equations.R",
+    "project_path": "02 - Scripts/01 - Functions/func1-1_Lorenzoni_Equations.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1755273508200.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "18,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1755273627,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1755273627070,
+    "read_only": false,
+    "read_only_alternatives": []
+}
