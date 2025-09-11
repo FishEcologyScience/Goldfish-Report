@@ -1,0 +1,94 @@
+otolith.vial,transect,obs,FL_mm,TL_mm,width_mm,height_mm,weight_g,health,colour,notes,ID,PIT.HEX,PIT.DEC,Sex,Eggs,Gonad.Mass.g,Bodywally.Thickness..mm.,Searcher,MergeNotes,Otoliths,Picture_O1,Otolith.Analysis_O1,Age.First.Read_O1,Certainty_O1,Notes.Read_O1,First.Read.Date,Picture_O2,Otolith.Analysis_O2,Age.First.Read_O2,Certainty_O2,NotesO2,AgeDiff,ReadToUse,use.age
+2,CS1,79-88,209,229,50,76,240,,,,NA,58664,9058664,M,N,NA,5.2,KS,,2,Y,asteriscii - R,8,3,"many dark spots, especially near the core",26/8/2025,Y,asteriscii - L,7,2,"could be one less or more, core is unclear",1,O2,7
+3,CS1,14,231,251,47,92,320,,brown,,166,58649,9058649,M,N,NA,7,KS,,1,Y,asteriscii - L,12,2,tip is slightly broken and edge is is blurry,26/8/2025,,,NA,NA,,,,12
+4,CS1,79-88,238,259,55,92,360,,,,NA,58687,9058687,F,Y,22,7,KS,,1,,,NA,NA,poor condition: broken and stained,,,,NA,NA,,,,
+6,CS1,79-88,139,151,24,49,NA,,gold,,172,58667,9058667,unk,N,NA,3,KS,,1,,,NA,NA,poor condition: dried and stained,,,,NA,NA,,,,
+7,CS1,5,330,360,71,136,1210,5,gold,,146,9984606D,98925,F,Y,80,7,JM,,1,Y,lapilli - L,15,3,"core is messy and dark, tip is broken",26/8/2025,,,NA,NA,,,,15
+8,CS1,5,340,390,75,135,1240,5,gold,,135,99846178,99192,M,N,NA,9.3,KS,,1,Y,asteriscii - R,23,1,"very clear rings, may be more",26/8/2025,,,NA,NA,,,,23
+10,CS1,5,335,365,74,136,1220,5,gold,,145,99846131,99121,F,Y,115,9,JM,,1,,,NA,NA,"poor condition: dried, stained, and deformed",,,,NA,NA,,,,
+12,WA,19,323,354,65,122,1010,,orange,,122,9984613E,99134,M,N,NA,8.8,KS,,2,Y,lapilli - L,23,3,"dark core, faded edge problem",,N,,NA,NA,broke during sanding process,,,23
+13,CS1,5,335,370,70,140,1230,5,gold,,140,99846126,99110,F,Y,109.6,6,JM,,1,Y,lapilli - L,19,3,difficult to locate core,,,,NA,NA,,,,19
+15,CS1,5,310,338,57,125,980,5,gold,,155,9984615A,99162,F,Y,36.1,11,JG,,2,Y,lapilli - R,12,4,"core is too dark, needs more sanding",26/8/2025,N,,NA,NA,"poor condition: stained, dried, and deformed",,DROP,12
+16,CS1,5,372,405,82,165,1740,5,orange,,143,99846077,98935,F,Y,97.6,8,JM,,1,Y,lapilli - L,16,2,"core is a little dark and unclear, and there many rings compacted in the outer edge, so it could be more",26/8/2025,,,NA,NA,,,,16
+17,CS1,5,335,365,81,120,1060,5,orange,,132,998551F4,160756,F,Y,NA,8,JM,,2,Y,lapilli - R,20,2,core is dark and outer edge is a little faded but rings are clear,26/8/2025,Y,lapilli - L,16,3,,4,O1,20
+18,CS1,5,300,325,68,124,870,5,gold,,157,99846095,98965,F,Y,57.9,7.8,KS,,2,Y,lapilli - L,18,2,"read 16 at first but camera and microscope later matched at 18, many rings are clear but the outer edge becomes more compact",26/8/2025,Y,lapilli - R,19,2,,-1,,18
+19,CS1,5,338,365,77,155,1400,5,gold,,149,99846218,99352,F,Y,208,9,JM,,2,Y,lapilli - L,14,2,"dark core, faded outer edge",26/8/2025,N,,NA,NA,poor condition: stained and shriveled,,,14
+21,CS1,5,364,401,78,165,1730,5,gold,,150,9984607D,98941,F,Y,270,11,JM,,2,Y,lapilli - R,19,4,"microscope and camera in disagreement, same problem of dark core and compact edge",26/8/2025,Y,lapilli - L,30,4,,-11,O2,30
+22,CS1,5,300,324,57,103,600,5,gold,,130,998551C0,160704,M,N,NA,4,JM,,1,Y,lapilli - R,22,2,lots of false annuli and outer layer is faded,26/8/2025,,,NA,NA,,,O1,22
+23,CS1,5,355,390,81,145,1580,5,gold,,136,99846229,99369,F,Y,58.3,12,JM,,2,Y,lapilli - R,18,3,doesn't show up on the camera so rings are not as clear,26/8/2025,Y,lapilli - L,23,4,,-5,O2,23
+24,WS,21,163,183,38,58,100,,gold,,124,003DEEC728,58728,M,N,NA,5,JG,,1,Y,lapilli - R,15,2,might be more,26/8/2025,,,NA,NA,,,,15
+25,CS1,5,325,345,66,124,920,4,orange,Scales missing,133,998550F8,160504,F,Y,80.4,8,JM,,1,Y,lapilli - R,23,4,"dark core, lots of false annuli",26/8/2025,,,NA,NA,,,DROP?,
+27,CS1,5,275,301,55,104,550,5,orange-black,,141,99846159,99161,F,Y,12.1,11,JG,,1,Y,lapilli - R,12,2,lots of false annuli but very clear,26/8/2025,,,NA,NA,,,,12
+28,CS1,5,340,375,70,135,1200,5,orange-black,,134,998551F3,160755,F,Y,138,7,JM,,2,Y,lapilli - R,19,3,"disagreement between picture and microscope, many outer layers",27/8/2025,Y,lapilli - L,29,4,core is very hard to read,-10,O1,19
+29,CS1,5,345,380,77,130,1250,5,gold,,139,998460A6,98982,F,Y,64,10,JG,,2,Y,lapilli - L,17,4,"lots of false annuli, outer rings visible but core is dark",27/8/2025,N,,NA,NA,unreadable,,DROP?,
+31,CS1,14,315,346,71,138,1090,,gold-white,,160,998461A4,99236,F,Y,94,11,JG,,2,Y,lapilli - R,17,3,"could be more, outer rings are thin",27/8/2025,Y,lapilli - L,24,2,,-7,O2,24
+32,CS1,5,336,365,71,126,980,5,gold,,147,,NO PIT,F,Y,67,9,JM,UncertainLink,1,Y,lapilli - L,28,3,,27/8/2025,,,NA,NA,,,,28
+33,CS1,5,335,375,71,145,1260,5,gold,,129,998550DE,160478,F,Y,103,9,JM,,2,Y,lapilli - R,18,3,"the issue with this is that while the core is dark, you can still see the rings but the outer edge is so compact, you can't see all the rings stacked closely to each other, so this could be an underestimate",27/8/2025,Y,lapilli - L,30,3,,-12,O2,30
+34,CS1,5,318,351,63,125,900,5,gold,,148,99846211,99345,F,Y,101,6,JM,,1,Y,lapilli - R,19,3,can't tell if the last layer is faded,27/8/2025,,,NA,NA,,,,19
+35,CS1,5,335,365,73,125,1340,5,gold,,138,998550 E6,160486,F,Y,66,11,JG,,2,Y,asteriscii - R,25,2,"lots of false annuli but visible rings, core is very small indicating greater age",27/8/2025,Y,asteriscii - L,29,3,,-4,O1,25
+36,CS1,98-103,204,225,35,77,200,,brown,,182,362929,1064362929,M?,N,NA,4,JM,,1,,,NA,NA,found missing,,,,NA,NA,,,,
+37,CS1,31-34,214,233,39,82,260,,brown,,179,363008,1064363008,M?,N,NA,8,JG,,2,Y,lapilli - R,17,2,clear colored bands,27/8/2025,Y,lapilli - L,17,2,,0,,17
+38,CS1,31-34,189,211,34,68,149,scale loss,brown,,180,362927,1064362927,M?,N,NA,6,JG,,2,Y,lapilli - R,13,2,clear colored bands around center but outer layers slightly faded,27/8/2025,Y,lapilli - L,13,2,,0,,13
+39,CS1,98-103,133,149,33,48,47,,,,181,362955,1064362955,M?,N,NA,1,JM,,2,Y,lapilli - L,12,2,,,N,,NA,NA,unreadable due to sanding issues,,,12
+40,CS1,104-115,112,124,14,36,25,,brown,,183,362922,1064362922,M?,N,NA,1,JM,,1,Y,lapilli - L,10,2,tip is broken; lots of false annuli but visible colored bands,27/8/2025,,,NA,NA,,,,10
+41,,46,355,396,71,145,1350,,orange,,31,99846139,99129,F,Y,99,12,JG,,1,Y,lapilli - L,14,2,core is small and outer rings are compact,27/8/2025,,,NA,NA,,,,14
+42,,007 - 011,321,346,74,139,1180,,yellow-black,,103,9984604C,98892,F,Y,NA,8,JM,,1,Y,lapilli - R,18,2,"same dark core, faded edge problem",27/8/2025,,,NA,NA,,,,18
+43,,12,324,350,63,124,980,,gold,,109,99846220,99360,F,Y,120.4,10,JG,,1,Y,lapilli - L,18,2,"same dark core, faded edge problem",27/8/2025,,,NA,NA,,,,18
+44,,12,299,328,54,109,630,,gold,A sore thing?,112,998460A8,98984,M?,N,NA,7,JM,,2,Y,asteriscii - R,24,3,lots of false annuli,27/8/2025,Y,asteriscii - L,17,2,,7,O2,17
+45,,12,317,349,67,117,950,,,,105,998460C5,99013,F,Y,61.7,6,NT,,1,Y,asteriscii - R,27,3,bands unclear,27/8/2025,,,NA,NA,,,,27
+46,,007 - 011,296,328,56,109,660,,gold,,101,9984610F,99087,M,N,15.6,5,NT,,2,Y,asteriscii - R,21,3,possibly an overestimate,27/8/2025,Y,asteriscii - L,28,3,might be older,-7,O2,28
+47,,50-51,147,163,35,50,69,,gold,,24,998460AB,98987,M,N,NA,3,JM,,1,Y,asteriscii - R,2,2,"couldn't be more than 2 but isn't small enough to be YOY, there are two faded rings ",27/8/2025,,,NA,NA,,,,2
+49,,50-51,209,227,37,76,211,,gold,,7,9984615F,99167,F,Y,8.5,4,NT,,1,Y,lapilli - R,13,2,"bands are clear in color but outer edge is compacted, could be one more",27/8/2025,,,NA,NA,,,,13
+50,,007 - 011,80,88,11,23,7,,gold,,96,9985508B,160395,unk,N,NA,1,JM,,1,Y,asteriscii - L,1,1,definitely looks like YOY,27/8/2025,,,NA,NA,,,,1
+51,50-51,50-51,75,82,9,23,7,,gold,,1,99855173,160627,unk,N,NA,1,JM,,2,Y,lapilli - R,12,2,,28/8/2025,Y,lapilli - L,15,3,,-3,O1,12
+53,,13,232,254,44,84,327,,gold,,89,9984618D,99213,F,Y,31.2,7,JG,,2,,,NA,NA,poor condition: deformed,,N,,NA,NA,poor condition: deformed,,,
+54,,46,130,143,22,47,50,,gold,,34,,99266,unk,N,NA,2,JM,UncertainLink,2,Y,lapilli - R,10,2,it's remarkable how small of an otolith could be so old,28/8/2025,Y,lapilli - L,13,3,,-3,O1,10
+56,,007 - 011,320,350,67,122,1050,,gold,,98,99846232,99378,F,Y,86.2,5,NT,,1,Y,asteriscii - R,16,2,core is messy,28/8/2025,,,NA,NA,,,,16
+57,,46,81,90,12,25,9,,gold,,30,998461BA,99258,unk,N,NA,1,JM,,2,Y,lapilli - R,9,2,"could be 10 if the outer ring is counted, i can't tell if it's too faded or if it's still forming",28/8/2025,Y,lapilli - L,9,2,,0,,9
+58,,18-19,216,234,38,79,247,,gold,,75,99846234,99380,M,N,NA,8,JG,,1,Y,lapilli - L,12,1,core is a little hard to find,28/8/2025,,,NA,NA,,,,12
+59,,13,294,323,54,107,680,,gold,,80,998461D6,99286,M,N,NA,6,NT,,1,Y,asteriscii - R,16,2,,28/8/2025,,,NA,NA,,,,16
+60,,13,274,303,59,105,500,,gold,,85,99846173,99187,F,Y,21.5,10,JG,,2,Y,lapilli - R,14,2,,28/8/2025,Y,lapilli - L,12,3,,2,O1,14
+62,,12,322,351,69,126,1080,,gold,,114,998460C4,99012,F,Y,64.7,11,JG,,2,Y,asteriscii - L,23,2,could be more,28/8/2025,Y,lapilli - L,17,4,"lots of false annuli, rings crammed near the edge, may be an underestimate",6,O1,23
+63,,50-51,180,196,41,64,131,,gold,,25,998461D5,99285,unk,N,NA,3,JM,,1,Y,lapilli - L,14,2,"has the same problem of dark core and faded edge, but rings are very clear, quite beautiful actually",28/8/2025,,,NA,NA,,,,14
+64,,46,298,327,48,110,470,,NA,,36,9984617B,99195,F,Y,15.2,6,JM,,2,Y,lapilli - L,12,1,core is a little dark but this one has clear notches lining the rostrum carving into the core,28/8/2025,N,,NA,NA,found broken,,,14
+65,,13,273,298,50,94,410,,gold,,83,99846050,98896,F,Y,66,7,JM,,1,Y,lapilli - L,16,1,tcore is a little dark but this one has clear notches lining the anti-rostrum carving into the core,28/8/2025,,,NA,NA,,,,16
+66,,007 - 011,311,346,67,120,1030,,gold,,100,9984605B,98907,F,Y,78.6,13,JG,,2,Y,asteriscii - R,29,2,core is very small and harder to read,28/8/2025,Y,asteriscii - L,20,2,,9,O2,20
+67,,13,352,393,72,154,1470,,gold,,79,99846100,99072,F,Y,83.7,13,JG,,2,Y,lapilli - R,19,1,"it could be more because there seems to be more rings at the edge but on the other hand, the core doesn't seem very small",28/8/2025,N,,NA,NA,looks like a broken piece of an asteriscus otolith?,,,19
+68,,18-19,297,336,54,117,704,,gold,,76,998461DF,99295,M,N,NA,8,JM,,2,Y,lapilli - R,22,2,"same dark core and faded edge problem but based on the notches and bands down the anti-rostrum, there seem to be near 20",28/8/2025,Y,lapilli - L,NA,NA,core is way too dark but there is big risk losing bands on the edge with more sanding,,,22
+69,,13,319,351,57,115,700,,gold,,77,99846045,98885,M,N,NA,7,JM,,1,Y,lapilli - L,9,2,,28/8/2025,,,NA,NA,,,,9
+70,,18-19,287,316,56,114,570,,gold,,44,99846065,98917,M,N,NA,11,JG,,1,Y,lapilli - L,21,4,"lots of rings and false annuli with dark core, had trouble reading this one",28/8/2025,,,NA,NA,,,DROP,
+71,,18-19,353,386,84,154,1650,,gold,,69,998461CE,99278,F,Y,49.2,15,JG,,2,Y,lapilli - L,26,3,"core is very small, and rings are better seen through camera",28/8/2025,Y,asteriscii - R,19,2,,7,O2,19
+72,,18-19,351,382,74,138,1150,,orange,,46,998461AF,99247,F,Y,68.2,10,JG,,2,Y,lapilli - R,23,3,faded edge,28/8/2025,Y,lapilli - L,13,4,dark and lots of false annuli,10,O1,23
+73,,18-19,357,383,71,148,1430,,orange-black,,51,998461A2,99234,F,Y,118.2,13,JG,,2,Y,lapilli - R,21,4,core is extremely dark,28/8/2025,Y,lapilli - L,18,3,,3,O2,18
+74,,18-19,291,334,58,106,670,,gold,,45,998550EF,160495,F,Y,37.9,8,JG,,2,Y,lapilli - R,19,3,lots of false annuli throughout rostrum,28/8/2025,Y,lapilli - L,16,3,"dark core, faded edge ",3,O1,19
+75,,18-19,352,396,76,146,1750,,orange-black,,53,99846127,99111,F,Y,115.2,11,JG,,1,Y,lapilli - L,17,3,unclear core,28/8/2025,,,NA,NA,,,,17
+76,,12,354,392,73,141,1420,no eye,gold,,115,998551D7,160727,F,Y,87.7,12,JG,,2,Y,lapilli - R,25,2,,28/8/2025,N,,NA,NA,found broken but was able to mount it,,,25
+77,,18-19,351,387,73,143,1350,,gold,,66,9984614B,99147,F,Y,98.1,13,JG,,2,Y,lapilli - R,26,4,"it's definitely old because the core is barely visible but there is so many false annuli and it's strangely colored, it's probable this is older",28/8/2025,Y,lapilli - L,20,2,rings are clearer from anti-rostrum to core,6,O2,20
+78,,18-19,297,333,58,113,690,,gold,,68,998460B2,98994,F,Y,55.7,8,JG,,1,Y,lapilli - L,19,4,"the core is so small, i think it has to be older but i can't see the rings in the dark center very well",28/8/2025,,,NA,NA,,,DROP,
+79,,13,291,326,54,111,590,,gold,,84, 9984604E,98894,M,,NA,10,JG,,2,Y,lapilli - R,22,3,"core is so small, it's hard to read, so this could be older",28/8/2025,Y,lapilli - L,28,2,beautiful but edge is a little faded,-6,O2,28
+80,,007 - 011,323,359,54,119,630,,gold,,102,99846172,99186,F,Y,3.1,11,JG,,1,Y,lapilli - R,17,1,rostrum has notches,28/8/2025,,,NA,NA,,,,17
+81,,18-19,368,404,73,164,1610,,gold,,43,998461 E4,99300,F,Y,74.1,15,JG,,2,Y,lapilli - R,31,1,"LOTS of bands, very small core",29/8/2025,Y,lapilli - L,18,2,,13,O1,31
+82,,18-19,357,399,81,158,1590,,gold,,54,99846093,98963,F,Y,200.5,10,JG,,2,Y,lapilli - R,27,2,could be more,29/8/2025,Y,lapilli - L,12,3,rostrum very faded,15,O1,27
+83,Fishway PM,28-Apr-25,224,244,42,84,286,,Frozen,,83,,,F,Y,22.2,5,JM,,1,Y,asteriscii - L,9,2,can't tell if there are more rings behind the rostrum,29/8/2025,,,NA,NA,,,,9
+84,Fishway AM,28-Apr-25,161,177,25,55,83.5,,Frozen,,84,,,unk,N,NA,2,JM,,1,Y,lapilli - R,16,2,"clear bands, but stacked faded bands in the rostrum",29/8/2025,,,NA,NA,,,,16
+85,Fishway AM,28-Apr-25,213,234,42,79,227,,Frozen,,85,,,F,Y,17,2,JM,,1,Y,lapilli - L,16,3,dark core,29/8/2025,,,NA,NA,,,,16
+86,Fishway AM,28-Apr-25,136,148,22,46,51,,Frozen,,86,,,unk,N,NA,2,JM,,2,Y,lapilli - L,11,1,,29/8/2025,N,,NA,NA,looks like a broken piece of an asteriscus otolith,,,11
+87,Fishway,24-Apr-25,266,285,51,97,513,,Frozen,,87,,,F,Y,15.5,5,JM,,2,Y,asteriscii - R,14,1,,29/8/2025,Y,asteriscii - L,11,2,,3,,14
+88,Fishway,24-Apr-25,250,267,41,92,329,,Frozen,,88,,,M,N,NA,4,JM,,2,,,NA,NA,found broken,,N,,NA,NA,found broken,,,
+89,Fishway PM,29-Apr-25,204,223,39,71,185,,Frozen,,89,,,F,Y,13.4,3,JM,,2,Y,lapilli - R,17,4,"very odd otolith, the core is very clear but the entire rostrum is blurry",29/8/2025,Y,lapilli - L,19,2,could be more because the very outer rostrum is very faded,-2,O2,19
+90,Fishway ,23-Apr-25,188,207,32,73,160.5,,Frozen,,90,,,M,N,NA,4,JM,,2,Y,lapilli - R,18,2,rings from rostrum in very clear,29/8/2025,Y,lapilli - L,23,4,broken at the core,-5,O1,18
+91,Fishway ,23-Apr-25,206,226,38,80,220,,Frozen,,91,,,F,Y,25.5,3,JM,,2,Y,lapilli - L,19,3,,29/8/2025,Y,asteriscii - L,17,1,,2,O2,17
+92,Fishway AM,29-Apr-25,151,166,23,51,69,,Frozen,,92,,,M?,N,NA,2,JM,,2,Y,lapilli - L,16,3,,29/8/2025,Y,lapilli - R,14,2,,2,O2,14
+93,Fishway AM,29-Apr-25,187,204,30,67,124,,Frozen,,93,,,F,Y,9.2,3,JM,,2,Y,lapilli - R,15,4,"same dark core, faded edge problem",29/8/2025,Y,lapilli - L,15,2,,0,O2,15
+94,Fishway AM,29-Apr-25,153,170,26,55,77,,Frozen,,94,,,M,N,NA,2,JM,,2,Y,lapilli - R,16,3,hard to count by band colour but this one has clearer points for each band starting from the rostrum,29/8/2025,Y,lapilli - L,12,2,,4,O2,12
+95,Fishway AM,29-Apr-25,254,284,52,90,433,,Frozen,,95,,,F,Y,50.1,4,JM,,2,Y,lapilli - R,18,1,very visible core,29/8/2025,Y,lapilli - L,16,3,"core not easy to identify and very small, could be older",2,O1,18
+96,Fishway AM,29-Apr-25,241,262,46,88,333,,Frozen,,96,,,F,Y,35.8,3,JM,,2,Y,lapilli - R,14,1,beautiful,29/8/2025,Y,lapilli - L,18,4,very odd looking,-4,O1,14
+97,Fishway ,05-May-25,242,273,55,98,444,,Frozen,,97,,,M,N,NA,5,JM,,1,Y,asteriscii - L,9,1,stunning,29/8/2025,,,NA,NA,,,,9
+98,Fishway ,05-May-25,190,208,34,75,180,,Frozen,,98,,,M,N,NA,4,JM,,2,Y,asteriscii - R,4,1,,29/8/2025,Y,asteriscii - L,8,3,rostrum faded,-4,O1,4
+99,Fishway ,05-May-25,267,296,44,100,420,,Frozen,,99,,,M,N,NA,5,JM,,2,Y,lapilli - R,17,2,core is visible but rostrum is messy,29/8/2025,Y,lapilli - L,21,2,core is clear but there are rings at th edge of rostrum hard to distinguish ,-4,O1,17
+100,Fishway ,07-May-25,232,254,39,86,283,,Frozen,,100,,,F,Y,13.9,4,JM,,2,Y,asteriscii - R,10,2,"edge is faded, so could be younger",29/8/2025,Y,asteriscii - L,10,3,faded rostrum,0,O1,10
+101,Fishway,07-May-25,187,207,35,78,181,,Frozen,,101,,,F,Y,4.2,2,JM,,2,Y,lapilli - R,18,3,"dark core, faded edge issue",29/8/2025,Y,lapilli - L,19,2,,-1,O2,19
+102,Blackbird Marsh,12-May-25,197,210,35,75,170,,Frozen,,102,,,M,N,NA,3,JM,,2,Y,lapilli - R,15,2,core is visible but the rostrum is a little blended and faded but reading from the anti-rostrum is clearer (left edge in),29/8/2025,Y,lapilli - L,16,2,,-1,O2,16
+103,Blackbird Marsh,12-May-25,169,NA,31,64,125,"Tail damaged, so no TL",Frozen,,103,,,F,Y,13.3,3,JM,,2,Y,asteriscii - R,9,1,,29/8/2025,Y,asteriscii - L,12,3,,-3,O1,9
+104,Blackbird Marsh,12-May-25,186,205,32,66,146,,Frozen,,104,,,M,N,NA,2,JM,,1,,,NA,NA,found broken,,,,NA,NA,,,,
+105,Blackbird Marsh,12-May-25,178,193,30,65,131,,Frozen,,105,,,M,N,NA,2,JM,,2,Y,asteriscii - R,6,1,looks like the sixth year is new,29/8/2025,Y,asteriscii - L,10,4,faded rostrum,-4,O1,6
