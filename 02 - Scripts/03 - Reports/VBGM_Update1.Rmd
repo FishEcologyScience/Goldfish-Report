@@ -1,0 +1,146 @@
+---
+title: "HH Goldfish VBGM notes"
+author: "Cole MacLeod"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intro
+
+Hi everyone,
+
+I've begun fitting the VB model to our data following methods from a FishR vignette by Derek Ogle (2013). It's been pretty straightforward, but given sufficient progress and a few hiccups, it feels like a good time for my first update. 
+
+I'm also aware that this is not necessarily the final state of the raw data, but the code will be pretty much the same regardless, so at worst this is proof-of-concept.
+
+------------------------------------------------------------------------
+
+## Step 1: Cleaning Data
+
+To start, I processed the raw data to pare down extraneous columns and created three dataframes: females (dataF), males (dataM), and all fish (data1). 
+
+I removed any fish with NA entries for TL or age, and filtered out individuals <200 mm that were estimated to be >10 y.o. 
+
+I didn't filter out these tiny/old fish at first, but that resulted in some bonkers estimates for the starting values in Step 2 (e.g. estimated avg. max length for males in the millions). They're also almost certainly illogical entries, as Jon noted in his email.
+
+This leaves us with n=73 in data1, n=48 in dataF, and n=18 in dataM. Lots of fish with 'M?' that got filtered out - could possibly revisit that, though we're not very interested in the male fish anyways.
+
+```{r M F all, echo=FALSE, warning=FALSE, message=FALSE}
+plots$FM1
+```
+
+So, this is what we're working with. Still some very small females around 15-20 years. We also only have one female below 10 years. More on that at the bottom.
+
+------------------------------------------------------------------------
+
+## Step 2: Starting values for nls() function 
+
+The FSA package contains the function findGrowthStarts() to estimate the starting values for fitting the VBGM using nls().
+
+```{r startvals, warning=TRUE}
+findGrowthStarts(TL_mm~use.age,data=data1)
+
+findGrowthStarts(TL_mm~use.age,data=dataF)
+
+findGrowthStarts(TL_mm~use.age,data=dataM)
+```
+
+The start value for males suggests their theoretical age at TL = 0 is -13 y.o., which is flagged as problematic.
+
+------------------------------------------------------------------------
+
+## Step 3: Generate Model, Visualize 
+
+First I created an object containing the growth model expression:
+
+```{r}
+vb<-TL_mm~Linf*(1-exp(-K*(use.age-t0)))
+```
+
+Then fit the VBGMs using nls()
+```{r}
+vb.nls1<-nls(vb, data=data1, start=startvals1)
+overview(vb.nls1)
+
+vb.nlsF<-nls(vb, data=dataF, start=startvalsF)
+overview(vb.nlsF)
+
+vb.nlsM<-nls(vb, data=dataM, start=startvalsM)
+overview(vb.nlsM)
+```
+
+So, estimates for K and t0 are really weak across the board. Linf is a significant predictor for the data1 and dataF models. 
+
+The model for the male subset doesn't perform at all, which is fine - they're not our focus and Lorenzoni 2010 didn't age them at all. We'll stop considering dataM from here on.
+
+Linf, K, and t0 are all highly correlated to each other, which Ogle (2013) explains is typical of VBGMs.
+
+```{r 2 VBGM plots, echo=FALSE, warning=FALSE, message=FALSE}
+plots$vb.1F
+```
+
+------------------------------------------------------------------------
+
+## Step 4: Bootstrap CIs
+
+Ogle (2013) explains that overview() on the model object uses normal distribution theory to calculate confidence intervals, which is not ideal for nonlinear models. They instead suggest bootstrapping (i.e. generating hundreds of new datasets by resampling the original dataset) CIs using nlsBoot(). This is approaching the edge of my understanding, so I took their word for it/did it for the sake of the exercise.
+
+```{r}
+boot1<-nlsBoot(vb.nls1)
+confint(boot1,plot=TRUE)
+
+bootF<-nlsBoot(vb.nlsF)
+confint(bootF,plot=TRUE)
+```
+
+Failed convergences are out of 999 iterations. At a glance, overview() errs low and nlsBoot() errs high. The plots offer a glimpse into the underlying method and potential skewness.
+
+------------------------------------------------------------------------
+
+## Step 5: Growth index
+
+Lorenzoni (2010) explains that a growth index can be calculated from the VBGM expression which permits comparisons of growth rates among populations. It has the formula Φ`=log(K)+2log(Linf)
+
+```{r}
+grindex1<-log(coef1[2])+2*log(coef1[1])
+names(grindex1)<-NULL
+grindex1
+
+grindexF<-log(coefF[2])+2*log(coefF[1])
+names(grindexF)<-NULL
+grindexF
+```
+------------------------------------------------------------------------
+
+## First impressions: 
+
+On the bright side, our L∞ value for the female-only model (431 mm) is basically identical to the value reported by Lorenzoni. Their model parameters were:
+
+L∞ = 43.019 ± 3.912 cm, 
+k = 0.272 ± 0.063, 
+t0 = 0.162 ± 0.086 years
+
+However, our estimates for K (0.067) and t0 (-4.3) were considerably less similar. 
+
+Also:
+
+(1) Regardless of whether you use normal or bootstrap methods, we have extremely wide CIs for each parameter estimate 
+
+(2) Our growth index Φ` is over three times that of Lorenzoni's (9.4 versus 2.7). 
+
+ While I can believe that Great Lakes Goldfish grow faster than  those in a smaller lake in Italy, I also suspect that these issues relate to:
+
+ a) The huge TL range across similar ages in the 15-20 year range; e.g. ~410 mm fish at 16 y.o., ~210 mm fish at 19 y.o.
+ 
+ b) Our data suggest that max size in the population can be attained as early as 16 y.o., while fish may live to >30
+ 
+ c) Our sample is generally weighted toward larger    individuals and we have zero female fish below 9 years. So, younger, smaller fish are absent from dataF and sparse in data1, which is likely widening CIs and inflating our growth rate. 
+ 
+ Point (c) is supported by the fact that the data1 model has narrower CIs (about half as wide for K and t0, less of a difference for Linf) and a slightly smaller growth index, though still very high (9.33)
+
+Finally, Lorenzoni back-calculated full length-at-age histories (i.e. 7 l-a-a points for a 7 y.o. fish) for a sample of female fish based on growth ring spacing on scales, whereas here we only have a single length-at-age observation for each individual. Possibly just an inherent limitation. Wouldn't be surprised if it also factors into the difference in growth indices.
+
+#### Thanks for reading - I would really appreciate any thoughts/suggestions on what I've presented here. In the meantime I'll continue trying to dial in my methods and interpretations, and I'll get going on the written report. 
