@@ -23,7 +23,7 @@
 library(tidyverse)
 library(ggplot2)
 library(patchwork)
-library(plotly)
+#library(plotly)
 library(FSA)
 library(nlstools)
 
@@ -34,69 +34,78 @@ options(scip=99)
 
 # Import data
 #---------------#
-data <- read.csv("01 - Data/2025-09-03_Ages.csv")
+data <- read.csv("01 - Data/2025-09-03_Ages.csv", na.strings=c("NA", "", "unk", "M?", "Frozen")) 
+                                              #ignoring the M? entries in Sex for now. only n=4 
+                                              #and not so worried about the male subset anyways
+                                              #frozen fish are NA for colour
 
+supp_data <- read.csv("01 - Data/2025-09-15_Sully.csv", na.strings=c("NA", ""))
+                                                               
 # Specify objects and parameters
 #--------------------------------#
-#param_widths <- data.frame(width_mm=c(50, 40, 30)) #Target widths for model predictions
-#df_testresults <- data.frame() #Home for test results
 plots <- list()
 
 ##### Prep data ---------------
-data1<-data %>% select(otolith.vial, obs, ID, FL_mm, TL_mm, weight_g, Sex, use.age) %>% 
- filter(!is.na(TL_mm), !is.na(use.age)) %>% 
- filter(!use.age>10 | !TL_mm<200) #illogical
 
-dataF<-data %>% select(otolith.vial, obs, ID, FL_mm, TL_mm, weight_g, Sex, use.age) %>% 
- filter(!is.na(TL_mm), !is.na(use.age), Sex == "F")
+# organize fish colours as usable factors
 
-dataM<-data %>% select(otolith.vial, obs, ID, FL_mm, TL_mm, weight_g, Sex, use.age) %>% 
- filter(!is.na(TL_mm), !is.na(use.age), Sex == "M") %>% 
- filter(!use.age>10 | !TL_mm<200)
+data$colour<- data$colour %>% 
+ str_replace_all(c("orange$|orange-black$|gold-white$|yellow-black$" = 
+  "Ornamental or Multicolour", "brown$|gold$" = "Naturalized")) %>% 
+as.factor() # categorizations subject to change - 
+#not sure if these should all be considered ornamental
 
-#plots for vb update 1
-plots$dataF<-ggplot(dataF,aes(x=use.age, y=TL_mm)) +
- geom_point()+
- labs(title="Females")
+# convert TL to mm for sully data
 
-plots$dataM<-ggplot(dataM,aes(x=use.age,y=TL_mm)) +
- geom_point()+
- labs(title="Males")
+supp_data<-supp_data %>% mutate(TL_mm = TL_cm*10)
 
-plots$data1<-ggplot(data1,aes(x=use.age,y=TL_mm)) +
- geom_point()+
- labs(title="All fish")
+### prep to merge dataframes
 
+#trim columns main data
+data1<-data %>% select(ID, FL_mm, TL_mm, weight_g, Sex, use.age, colour, oto) %>% 
+ filter(!is.na(TL_mm), !is.na(use.age)) #%>% 
+ #filter(use.age<10 | TL_mm>200) #might be removing too many points here but
+    #definitely need to remove a few 
+    #e.g. 8 cm fish at 12 years old with naturalized colours??
+data1$ID<-as.character(data1$ID) #needs to match sully ID str
 
-plots$FM1<-
- with(plots,
-      data1/(dataF+dataM))
-plots$FM1
+#trim columns sully data
+supp_data1<-supp_data %>% select(ID, TL_mm, weight_g, Sex, use.age)
+
+#merge
+data1<-bind_rows(data1, supp_data1) 
+
+#testing
+data1<-data1 %>% mutate(TL_cm=TL_mm/10)
+
+#female-only subset
+dataF<-data1 %>% filter(Sex=="F")
 
 #### Build vB objects and fit model -----------------
 
 #starting values for nls()
-startvals1<-findGrowthStarts(TL_mm~use.age,data=data1)
-startvalsF<-findGrowthStarts(TL_mm~use.age,data=dataF)
+startvals1<-findGrowthStarts(TL_cm~use.age,data=data1)
+startvalsF<-findGrowthStarts(TL_cm~use.age,data=dataF)
 
-startvalsM<-findGrowthStarts(TL_mm~use.age,data=dataM)
+#startvalsM<-findGrowthStarts(TL_mm~use.age,data=dataM)
 #start value suggests theoretical age at length 0 is -13 y.o.
 
 ###growth model expression
-vb<-TL_mm~Linf*(1-exp(-K*(use.age-t0)))
+vb<-TL_cm~Linf*(1-exp(-K*(use.age-t0)))
 
-####fit nonlinear model
+###fit nonlinear model
 vb.nls1<-nls(vb, data=data1, start=startvals1)
 overview(vb.nls1)
-coef1<-coef(vb.nls1)
+coef1<-coef(vb.nls1) #isolate coefficients to calculate growth index
 
 vb.nlsF<-nls(vb, data=dataF, start=startvalsF)
 overview(vb.nlsF)
 coefF<-coef(vb.nlsF)
 
-vb.nlsM<-nls(vb, data=dataM, start=startvalsM)
-overview(vb.nlsM)
-coefM<-coef(vb.nlsM)
+# male subset is no good
+#vb.nlsM<-nls(vb, data=dataM, start=startvalsM)
+#overview(vb.nlsM)
+#coefM<-coef(vb.nlsM)
 
 ###get CIs for model parameters (model object uses normal distrib. theory to
  #estimate CIs - not ideal for nls)
@@ -110,19 +119,29 @@ confint(bootF,plot=TRUE)
 ###visualize ------------------------
 #does not use model objects
 
+#lorenzoni equation
+l10<-function(x) {43.019*(1-exp(-0.272*(x-0.162)))}
+
 #female fish
-plots$plotF<-ggplot(dataF,aes(x=use.age,y=TL_mm)) +
+plots$plotF<-ggplot(dataF,aes(x=use.age,y=TL_cm)) +
+geom_function(fun=l10)+ 
  geom_smooth(method="nls",formula="y~Linf*(1-exp(-K*(x-t0)))",
              method.args=list(start=startvalsF),se=FALSE) +
+ 
  geom_point()+
  labs(title="Females")
 
-#all fish
+plots$plotF
+
+#all fish by sex and phenotype
+#x and y are swapped
 plots$plot1<-ggplot(data1,aes(x=use.age,y=TL_mm)) +
  geom_smooth(method="nls",formula="y~Linf*(1-exp(-K*(x-t0)))",
              method.args=list(start=startvals1),se=FALSE) +
  geom_point()+
  labs(title="All Goldfish")
+
+plots$plot1
 
 plots$vb.1F<-
  with(plots,
@@ -138,9 +157,6 @@ names(grindex1)<-NULL
 
 grindexF<-log(coefF[2])+2*log(coefF[1])
 names(grindexF)<-NULL
-
-grindexM<-log(coefM[2])+2*log(coefM[1])
-names(grindexM)<-NULL
 
 
 ###Render summary markdown
