@@ -1,49 +1,48 @@
 ## --------------------------------------------------------------#
-## Script name: func1-1_Lorenzoni_Equations
+## Script name: func1-1_AgeFecundity_Equations
 ##
 ## Purpose of script: 
 ##    
-## build Lorenzone et al. 2010 equations as functions
+## build Lorenzoni et al. 2010 equations (TL to Age and TL to Fecundity) 
+## as functions
 ## 
-## 
+## Build local VBGM equation (Script0-2_Ages) as function
 ##
 ## Author: 
 ## Cole MacLeod, adapted from Simon Fernandes and Nicole Turner 
 ## 
 ## Modifications
 ## Rewritten by Paul Bzonek for clarity and future-proofing
+## Revisited and updated by Cole MacLeod for MS prep
 ##
 ## Original Date Created: 4 Feb 2025
-## Version: 2025-05-07
+## Version: 2025-10-15
 ## ---------------------------------------------------------------#
 
 
 
-#####Parameterize functions from Lorenzoni et al. 2010 ###########----
+#####Parameterize functions ###########----
 #-------------------------------------------------------------# 
 
-#' Estimate age from Tail length
-#' @name func_TL_to_Age
+#' Estimate age from Tail length - Lorenzoni 2010
+#' @name func_L10_TL_Age
 #' @param TL Tail length of goldfish in mm. 
 #'              The function will fail if length exceeds 430 mm
 #' @return   Predicted age in years
 #' @author   Nicole Turner
 #' @notes    From von Bertalanffy growth function
 #'              Age = t0 - log(1 - (TL / Linf)) / k
-func_TL_to_Age <- function(TL) {
+func_L10_TL_Age <- function(TL) {
  Age = 0.162 - log(1 - (TL / 430.19)) / 0.272
  
  return(Age)
 }
 
-
-
-
 #' Estimate fecundity from Tail length
 #' @name func_TL_to_Eggs
 #' @param TL Tail length of goldfish in mm. 
 #' @return   Predicted count of eggs
-#' @author   Cole Mac leod
+#' @author   Cole MacLeod
 #' @notes    Combines TL to SL conversion with SL to fecundity function from Lorenzoni et al.
 
 func_TL_to_Eggs <- function(TL) {
