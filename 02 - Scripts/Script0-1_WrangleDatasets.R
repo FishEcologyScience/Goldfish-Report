@@ -30,6 +30,11 @@ data_field <- read.csv("01 - Data/2025-10-24_WL.csv", na.strings=c("NA", "")) # 
 data_field$ID<-as.character(data_field$ID) 
 data_field$weight_g<-as.numeric(data_field$weight_g)
 
+
+data_field<-data_field %>% mutate(height_mm = replace(height_mm, ID=="52", NA)) %>% 
+ mutate(height_mm = replace(height_mm, ID=="75", NA))#unreasonable heights
+                                
+
 #DFO ages and dissection (lab)
 data_ages <- read.csv("01 - Data/2025-10-24_Ages.csv", na.strings=c("NA", "", "unk", "M?"))
 data_ages$ID<-as.character(data_ages$ID) 
@@ -39,21 +44,48 @@ data_SN <- read.csv("01 - Data/2025-09-15_Sully.csv", na.strings=c("NA", ""))
 data_SN<-data_SN %>% mutate(TL_mm=TL_cm*10, #need lengths as mm
                                   SL_mm=SL_cm*10)
 
-### Merge dataframes
-#----------------------------#
-
 #Combine field and lab data (join new columns)
+#----------------------------#
 data_DFO<-data_field %>% left_join(data_ages, 
-                              by="ID", unmatched="error", relationship="one-to-one") %>%
-#some fish in the age dataset (9000 series IDs) were not in the field dataset,
-#so created 'blank' placeholder IDs in field file.
-#But their morphological data is held with the ages,
-#so need to combine (coalesce) morphology columns
-mutate(TL_mm=coalesce(TL_mm.x, TL_mm.y), 
+                                   by="ID", unmatched="error", relationship="one-to-one") %>%
+ #some fish in the age dataset (9000 series IDs) were not in the field dataset,
+ #so created 'blank' placeholder IDs in field file.
+ #But their morphological data is held with the ages,
+ #so need to combine (coalesce) morphology columns
+ mutate(TL_mm=coalesce(TL_mm.x, TL_mm.y), 
         FL_mm=coalesce(FL_mm.x, FL_mm.y), 
         width_mm=coalesce(width_mm.x, width_mm.y), 
         height_mm=coalesce(height_mm.x, height_mm.y),
         weight_g=coalesce(weight_g.x, weight_g.y))
+
+###Predict widths, heights, and missing weights of SN fish
+#----------------------------#
+#Depends on:
+
+#TL to width, height, and mass models
+log_TL_width <- lm(log(width_mm)~log(TL_mm), data_DFO)
+log_TL_height<-lm(log(height_mm)~log(TL_mm), data_DFO)
+log_TL_mass <- lm(log(weight_g)~log(TL_mm), data=data_DFO)
+
+#predict width with variation
+set.seed(1)
+data_SN<-data_SN %>% mutate(
+ width_mm = exp(rnorm(50, mean=predict(log_TL_width, newdata=data_SN), 
+                  sd=summary(log_TL_width)$sigma)))
+#height with variation
+data_SN<-data_SN %>% mutate(
+ height_mm = exp(rnorm(50, mean=predict(log_TL_height, newdata=data_SN), 
+                      sd=summary(log_TL_height)$sigma)))
+
+#mass with variation
+data_SN<-data_SN %>% mutate(
+ weight_g.1 = as.numeric(weight_g),
+ weight_g.2 = exp(rnorm(50, mean=predict(log_TL_mass, newdata=data_SN), 
+                       sd=summary(log_TL_mass)$sigma)),
+ weight_g=coalesce(weight_g.1, weight_g.2))
+
+### Merge dataframes
+#----------------------------#
 
 #Combine DFO and SN data
 data<-bind_rows(list(DFO=data_DFO, SN=data_SN), .id="dataset")
@@ -65,7 +97,7 @@ data<-data %>%
 
 ### Save cleaned csv
 #----------------------------#
-#write_excel_csv(data, "01 - Data/2025-10-29_DFO_SN.csv")
+#write_excel_csv(data, "01 - Data/2025-12-12_DFO_SN.csv")
  
 
  
@@ -106,13 +138,6 @@ data_batch<- data_batch %>%
 #Expand rows and estimate TL, weight, width
 #----------------------------#
 
-#Depends on:
-
-#TL to width function 
-source("02 - Scripts/01 - Functions/Func2-1_Equations_Misc.R")
-#TL to width model
-lm_TL_width <- lm(width_mm~TL_mm, data)
-
 #Expand, TL, weight
 set.seed(1) #set seed for random TL estimates
 df_batch_expanded <- data_batch %>%
@@ -122,11 +147,16 @@ df_batch_expanded <- data_batch %>%
         dataset = "batch", #Log fish as a batch
         ID = paste(key, class, count, key_expanded, sep = "")) #give each batch fish a unique ID
 
-#Width
-set.seed(1) #do it again for width (unsure if necessary)
+#Width and height
+set.seed(1) #do it again (probably not necessary)
+
 df_batch_expanded<-df_batch_expanded %>% mutate(
-width_mm = rnorm(444, mean=predict(lm_TL_width, newdata=df_batch_expanded), 
-                 sd=summary(lm_TL_width)$sigma)) #Predict width with variation
+width_mm = exp(rnorm(444, mean=predict(log_TL_width, newdata=df_batch_expanded), 
+                 sd=summary(log_TL_width)$sigma)))
+
+df_batch_expanded<-df_batch_expanded %>% mutate(
+ height_mm = exp(rnorm(444, mean=predict(log_TL_height, newdata=df_batch_expanded), 
+                  sd=summary(log_TL_height)$sigma)))
 
 ### Merge batch and individual dataframes
 #----------------------------#
@@ -147,10 +177,10 @@ data1 <- bind_rows(df_batch_expanded, data) %>%
         pred.eggs = func_TL_to_Eggs(TL_mm), #Predict eggs with function
         pred.eggs = case_when(TL_mm < 100 ~ NA, #Remove predictions for immature fish
                               TRUE ~ pred.eggs))%>% 
- select(key=key2, ID, dataset, TL_mm, width_mm, weight_g, 
+ select(key=key2, ID, dataset, TL_mm, width_mm, height_mm, weight_g, 
         gonads_g, pred.eggs, pred.age, age=use.age, class)#pred.age,
 
 ### Save cleaned csv
 #----------------------------#
-#write_excel_csv(data1, "01 - Data/2025-11-05_Batch_DFO_SN.csv")
+#write_excel_csv(data1, "01 - Data/2025-12-12_Batch_DFO_SN.csv")
 

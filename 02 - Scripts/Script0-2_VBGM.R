@@ -32,11 +32,11 @@ options(scip=99)
 
 ### Load/manipulate data
 #----------------------------#
-data<-read.csv("01 - Data/2025-10-29_DFO_SN.csv")
+data<-read.csv("01 - Data/2025-12-09_DFO_SN.csv")
 data$use.age<-as.numeric(data$use.age)
 
 #nlsboot() breaks if I don't remove unused rows
-ages<-data %>% filter(!is.na(use.age), !is.na(TL_mm))                                                              
+ages_trimmed<-data %>% filter(!is.na(use.age), !is.na(TL_mm))                                                              
 
 #### Build objects and fit model -----------------
 
@@ -44,9 +44,9 @@ ages<-data %>% filter(!is.na(use.age), !is.na(TL_mm))
 vb<-TL_mm~Linf*(1-exp(-K*(use.age-t0))) 
 
 #starting values for nls()
-startvals1<-findGrowthStarts(TL_mm~use.age, data=ages, type = "von Bertalanffy", plot=TRUE)
+startvals1<-findGrowthStarts(TL_mm~use.age, data=ages_trimmed, type = "von Bertalanffy", plot=TRUE)
 ###fit VBGM
-vb.nls1<-nls(vb, data=ages, start=startvals1)
+vb.nls1<-nls(vb, data=ages_trimmed, start=startvals1)
 
 overview(vb.nls1)
 coef(vb.nls1)

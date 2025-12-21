@@ -26,8 +26,8 @@ library(patchwork)
 
 ### Load data
 #----------------------------#
-data<-read.csv("01 - Data/2025-10-29_DFO_SN.csv")
-data1<-read.csv("01 - Data/2025-11-04_Batch_DFO_SN.csv")
+data<-read.csv("01 - Data/2025-12-12_DFO_SN.csv")
+data1<-read.csv("01 - Data/2025-12-12_Batch_DFO_SN.csv")
 
 
 ### Specify objects and parameters
@@ -45,7 +45,7 @@ plots <- list() #home for plots
 #Prep dataset
 data_model <- data1 %>% #Trim fish without width measurements
  filter(TL_mm > 100, !is.na(width_mm)) %>% #and fish that aren't fecund
- select(key, width_mm, TL_mm, pred.eggs)   
+ select(key, width_mm, height_mm, TL_mm, pred.eggs)   
  
 
 ###Linear model
@@ -169,13 +169,19 @@ plots$combined1
 
 ##### Incorporate batch data to estimate cumulative egg passage #########################----
 #-------------------------------------------------------------# 
-data_batch_cumulative <- data1 %>%
+data_batch_cumulativeW <- data1 %>%
  arrange(width_mm) %>% #Arrange by ascending width
  mutate(pred.eggs = replace_na(pred.eggs, 0),
         pred.eggs.remaining = cumsum(pred.eggs), # cumulative sum below width threshold
         prop.remaining = pred.eggs.remaining / max(pred.eggs.remaining, na.rm=TRUE)
         )  
 
+data_batch_cumulativeH <- data1 %>%
+ arrange(height_mm) %>% #Arrange by ascending width
+ mutate(pred.eggs = replace_na(pred.eggs, 0),
+        pred.eggs.remaining = cumsum(pred.eggs), # cumulative sum below width threshold
+        prop.remaining = pred.eggs.remaining / max(pred.eggs.remaining, na.rm=TRUE)
+ )  
 #Predict ageclass TL into ageclass widths (0, 5, 10, 15, 20, 25, 30)
 #func_TL_to_Width(c(71, 170, 243, 298, 338, 368, 390))
 
@@ -183,17 +189,26 @@ data_batch_cumulative <- data1 %>%
 #Plot
 #age gives an idea of the number of spawning events an individual could get off before being excluded
 #but predicted ages are not very accurate so did not include in rough draft fig
-plots$CumulativeEggCurve <-
- ggplot(data_batch_cumulative, aes(x = width_mm, y = prop.remaining, colour=pred.age)) +
- geom_rug(sides="b1")+
- geom_line(color = "firebrick", size = 1) +
- scale_colour_viridis_c()+
- #geom_vline(xintercept = c(7, 28, 43, 55, 63, 70, 74), #Widths by age class
-           # colour="dark grey")+
- geom_vline(xintercept=c(30, 40, 50))+ #Widths by cutoffs
- labs(x = "Bar Spacing/Goldfish Body Width (mm)", y = "Proportion of Eggs in Population") 
+plots$CumulativeEggCurveW <-
+ ggplot(data_batch_cumulativeW) +
+ geom_line(mapping=aes(x = width_mm, y = prop.remaining), color = "firebrick", size = 1.25)+
+geom_vline(xintercept=c(35, 44, 48), size=1, linetype="dashed")+
+ theme(axis.line = element_line(linewidth=1),
+       axis.text=element_text(size=14, colour="black"),
+       axis.title=element_text(size=14, colour="black"))+
+ labs(x = "Body Width (mm)", y = "Proportion of Eggs in Population") 
 
+plots$CumulativeEggCurveH <-
+ ggplot(data_batch_cumulativeH) +
+ geom_line(mapping=aes(x = height_mm, y = prop.remaining), color = "firebrick", size = 1.25)+
+ geom_vline(xintercept=c(70, 89, 95), size=1, linetype="dashed")+
+ theme(axis.line = element_line(linewidth=1),
+       axis.text=element_text(size=14, colour="black"),
+       axis.title=element_text(size=14, colour="black"))+
+ labs(x = "Height (mm)", y = "") 
+
+plots$CumulativeEggCurve<-with(plots,
+                               CumulativeEggCurveW+CumulativeEggCurveH)
 plots$CumulativeEggCurve
-
 
 ##------------------------------END------------------------------##
