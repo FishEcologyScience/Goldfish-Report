@@ -1,167 +1,144 @@
-
 ############################################################
-# 10_morphology_plots_field_only.R
-# Purpose: Read a single raw FIELD dataset, do minimal cleaning,
-#          and produce three basic plots:
-#          (1) Fork Length (FL_mm) histogram
-#          (2) Width (width_mm) histogram
-#          (3) Mass (weight_g) histogram
+# 10_morphology_plots_field_only.R  (Scatterplots Only)
 #
-# Style: Beginner-friendly, tidyverse-only, many inline comments.
-# Run:   source("02_scripts/10_morphology_plots_field_only.R")
+# Purpose:
+#   - Read species‑specific raw morphology dataset
+#   - Clean numeric columns
+#   - Produce a summary table
+#   - Create TWO scatterplots:
+#         (1) Width vs Fork Length  
+#         (2) Width vs Mass
+#
+# Species-driven folder structure:
+#   01 - Data/Species/<species>/
+#   03 - Plots/
 ############################################################
 
-# ------------ 0) Packages and species selection -----------------
+# ------------ 0) Load packages ----------------------------
 
-# Load tidyverse for import, wrangling, and plotting
 library(tidyverse)
-# lubridate is optional—only used if a datetime column exists
+library(readxl)
 library(lubridate)
 
-# Choose which species to process (folder names depend on this)
-species <- "Species"  # <-- change to "Carp", etc. when needed
+# ------------ 1) Select species ---------------------------
 
-# ------------ 1) Folder paths (match project_template layout) ----
+species <- "Rudd"   # Change this to "Carp", "Goldfish", etc.
+species_folder <- species
 
-# Input: raw field data folder (no lab/ages used here)
-raw_field_path <- file.path("01 - Data", "Data", "HH_Rudd_GF_LengthWidths_2024.csv")
+# ------------ 2) Folder paths -----------------------------
 
-# Intermediate / processed data
-processed_path <- file.path("01 - Data", "processed")
+raw_dir       <- file.path("01 - Data", "Species", species_folder)
+processed_dir <- file.path("01 - Data", "processed", species_folder)
+figs_dir      <- file.path("03 - Plots", "01_figures")
+tables_dir    <- file.path("03 - Plots", "01_tables")
 
-# Output folders
-figs_path   <- file.path("03 - Plots", "01_figures")
-tables_path <- file.path("03 - Plots", "01_tables") 
+dir.create(processed_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(figs_dir,      recursive = TRUE, showWarnings = FALSE)
+dir.create(tables_dir,    recursive = TRUE, showWarnings = FALSE)
 
-# Create folders if missing (safe if they already exist)
-dir.create(processed_path, recursive = TRUE, showWarnings = FALSE)
-dir.create(figs_path,      recursive = TRUE, showWarnings = FALSE)
-dir.create(tables_path,    recursive = TRUE, showWarnings = FALSE)
+# ------ 3) Combine All Excel files for the selected species -------
 
-# ------------ 2) File name (EDIT to your actual file) ------------
+# Detect all .xlsx files
+raw_files <- list.files(raw_dir,
+                        pattern = "\\.xlsx$",
+                        ignore.case = TRUE,
+                        full.names = TRUE)
 
-# Build the expected raw file path; change the pattern if your file is named differently
-field_csv <- file.path("01 - Data", "Data", "HH_Rudd_GF_LengthWidths_2024.csv")
+if (length(raw_files) == 0) {
+ stop("No Excel (.xlsx) files found in: ", raw_dir)
+}
 
-# Optional: quick message for confirmation
-message("Reading field file: ", field_csv)
+message("Found ", length(raw_files), " Excel files for ", species, ".")
+message("Combining all files into one dataset...")
 
-# ------------ 3) Import -----------------------------------------
+# Read each Excel file into a list
+df_list <- lapply(raw_files, readxl::read_excel)
 
-# Read the raw field CSV
-data_field <- read_csv(field_csv, show_col_types = FALSE)
+# Combine all into one dataframe
+data_field <- bind_rows(df_list)
 
-# Quick peek (helps beginners see what was read)
-message("Field data preview:")
+message("Combined dataset preview:")
 print(head(data_field))
 
-# ------------ 4) Minimal cleaning (SAFE & EXPLICIT) ---------------
 
-# We will:
-#  - ensure numeric columns are actually numeric
-#  - (optionally) parse datetime if present
-#  - keep as-is otherwise (simple, readable steps)
+# ------------ 4) Minimal cleaning --------------------------
 
 clean_df <- data_field %>%
- # Convert length/width/weight to numeric, if they aren't already
  mutate(
-  ForkLength_mm    = suppressWarnings(as.numeric(ForkLength_mm)),
-  Width_mm = suppressWarnings(as.numeric(Width_mm)),
-  Mass_g = suppressWarnings(as.numeric(Mass_g))
- ) %>%
- # If a datetime column exists, try to parse it; otherwise leave untouched
- {
-  if ("datetime" %in% names(.)) {
-   mutate(., datetime = suppressWarnings(as.POSIXct(datetime)))
-  } else {
-   .
-  }
- }
+  ForkLength_mm = suppressWarnings(as.numeric(ForkLength_mm)),
+  Width_mm      = suppressWarnings(as.numeric(Width_mm)),
+  Mass_g        = suppressWarnings(as.numeric(Mass_g))
+ )
 
-# Preview the cleaned data
 message("Preview of cleaned data:")
 print(head(clean_df))
 
-# Save a processed copy (handy for re-use)
-saveRDS(clean_df, file.path(processed_path, paste0(species, "_field_clean.rds")))
+saveRDS(clean_df,
+        file.path(processed_dir, paste0(species, "_clean.rds")))
 
-# ------------ 5) Basic summaries (QA) ----------------------------
+# ------------ 5) Summary table -----------------------------
 
 summary_tbl <- clean_df %>%
  summarise(
-  n_rows       = n(),
-  n_FL         = sum(!is.na(ForkLength_mm)),
-  n_width      = sum(!is.na(Width_mm)),
-  n_weight     = sum(!is.na(Mass_g)),
-  FL_mean_mm   = mean(ForkLength_mm,    na.rm = TRUE),
-  width_mean_mm= mean(Width_mm, na.rm = TRUE),
-  weight_mean_g= mean(Mass_g, na.rm = TRUE)
+  n_rows        = n(),
+  n_FL          = sum(!is.na(ForkLength_mm)),
+  n_width       = sum(!is.na(Width_mm)),
+  n_weight      = sum(!is.na(Mass_g)),
+  FL_mean_mm    = mean(ForkLength_mm, na.rm = TRUE),
+  width_mean_mm = mean(Width_mm,      na.rm = TRUE),
+  weight_mean_g = mean(Mass_g,        na.rm = TRUE)
  )
 
-message("Summary:")
-print(summary_tbl)
+write_csv(summary_tbl,
+          file.path(tables_dir, paste0(species, "_summary.csv")))
 
-# Save summary table
-write_csv(summary_tbl, file.path(tables_path, paste0(species, "_morphology_summary_field_only.csv")))
+message("Summary table created.")
 
+# ------------ 6) Caption helper ----------------------------
 
-############################################################
-# 6) Scatterplots (Width vs Fork Length, and Width vs Mass)
-############################################################
+caption_n <- function(df, text) {
+ paste0(species, " (n = ", nrow(df), "): ", text)
+}
 
-# We will make two simple scatterplots and save them as PNGs:
-#   (a) Width (mm) vs Fork Length (mm)
-#   (b) Width (mm) vs Mass (g)
+# ------------ 7) Scatterplot: Width vs Fork Length ---------
 
-# Before plotting, it's OK to remove rows where
-# the required variables are missing (optional but tidy):
-
-df_for_length <- clean_df %>%
+df_scatter_fl <- clean_df %>%
  filter(!is.na(Width_mm), !is.na(ForkLength_mm))
 
-df_for_mass <- clean_df %>%
+p_scatter_fl <- ggplot(df_scatter_fl, aes(x = ForkLength_mm, y = Width_mm)) +
+ geom_point(color = "#2c7fb8", alpha = 0.6, size = 2) +
+ labs(
+  title   = paste0(species, " - Width by Fork Length"),
+  x       = "Fork Length (mm)",
+  y       = "Width (mm)",
+  caption = caption_n(df_scatter_fl, "Width plotted against fork length.")
+ ) +
+ theme_minimal()
+
+ggsave(
+ filename = file.path(figs_dir, paste0(species, "_scatter_width_by_forklength.png")),
+ plot = p_scatter_fl, width = 7, height = 5, dpi = 300
+)
+
+# ------------ 8) Scatterplot: Width vs Mass ----------------
+
+df_scatter_mass <- clean_df %>%
  filter(!is.na(Width_mm), !is.na(Mass_g))
 
-# -------------------------------
-# 6a) WIDTH (Y) BY FORK LENGTH (X)
-# -------------------------------
-
-p_width_by_fork <- ggplot(df_for_length, aes(x = ForkLength_mm, y = Width_mm)) +
- geom_point(color = "#2c7fb8", alpha = 0.6, size = 2) +     # points with slight transparency
- labs(
-  title = paste0(species, " - Width by Fork Length"),
-  x = "Fork Length (mm)",
-  y = "Width (mm)"
- ) +
- theme_minimal(base_size = 12)
-
-# Save the scatterplot
-ggsave(
- filename = file.path(figs_path, paste0(species, "_width_by_forklength.png")),
- plot = p_width_by_fork,
- width = 7, height = 5, dpi = 300
-)
-
-# --------------------------
-# 6b) WIDTH (Y) BY MASS (X)
-# --------------------------
-
-p_width_by_mass <- ggplot(df_for_mass, aes(x = Mass_g, y = Width_mm)) +
+p_scatter_mass <- ggplot(df_scatter_mass, aes(x = Mass_g, y = Width_mm)) +
  geom_point(color = "#f16913", alpha = 0.6, size = 2) +
  labs(
-  title = paste0(species, " - Width by Mass"),
-  x = "Mass (g)",
-  y = "Width (mm)"
+  title   = paste0(species, " - Width by Mass"),
+  x       = "Mass (g)",
+  y       = "Width (mm)",
+  caption = caption_n(df_scatter_mass, "Width plotted against mass.")
  ) +
- theme_minimal(base_size = 12)
+ theme_minimal()
 
-# Save the scatterplot
 ggsave(
- filename = file.path(figs_path, paste0(species, "_width_by_mass.png")),
- plot = p_width_by_mass,
- width = 7, height = 5, dpi = 300
+ filename = file.path(figs_dir, paste0(species, "_scatter_width_by_mass.png")),
+ plot = p_scatter_mass, width = 7, height = 5, dpi = 300
 )
 
-message("Scatterplots saved to: ", figs_path)
-``
+message("Scatterplots generated for: ", species)
 
