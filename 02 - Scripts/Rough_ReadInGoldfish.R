@@ -19,7 +19,7 @@ library(tidyverse)
 library(lubridate)
 
 # Choose which species to process (folder names depend on this)
-species <- "Goldfish"  # <-- change to "Carp", etc. when needed
+species <- "Species"  # <-- change to "Carp", etc. when needed
 
 # ------------ 1) Folder paths (match project_template layout) ----
 
@@ -103,4 +103,65 @@ print(summary_tbl)
 
 # Save summary table
 write_csv(summary_tbl, file.path(tables_path, paste0(species, "_morphology_summary_field_only.csv")))
+
+
+############################################################
+# 6) Scatterplots (Width vs Fork Length, and Width vs Mass)
+############################################################
+
+# We will make two simple scatterplots and save them as PNGs:
+#   (a) Width (mm) vs Fork Length (mm)
+#   (b) Width (mm) vs Mass (g)
+
+# Before plotting, it's OK to remove rows where
+# the required variables are missing (optional but tidy):
+
+df_for_length <- clean_df %>%
+ filter(!is.na(Width_mm), !is.na(ForkLength_mm))
+
+df_for_mass <- clean_df %>%
+ filter(!is.na(Width_mm), !is.na(Mass_g))
+
+# -------------------------------
+# 6a) WIDTH (Y) BY FORK LENGTH (X)
+# -------------------------------
+
+p_width_by_fork <- ggplot(df_for_length, aes(x = ForkLength_mm, y = Width_mm)) +
+ geom_point(color = "#2c7fb8", alpha = 0.6, size = 2) +     # points with slight transparency
+ labs(
+  title = paste0(species, " - Width by Fork Length"),
+  x = "Fork Length (mm)",
+  y = "Width (mm)"
+ ) +
+ theme_minimal(base_size = 12)
+
+# Save the scatterplot
+ggsave(
+ filename = file.path(figs_path, paste0(species, "_width_by_forklength.png")),
+ plot = p_width_by_fork,
+ width = 7, height = 5, dpi = 300
+)
+
+# --------------------------
+# 6b) WIDTH (Y) BY MASS (X)
+# --------------------------
+
+p_width_by_mass <- ggplot(df_for_mass, aes(x = Mass_g, y = Width_mm)) +
+ geom_point(color = "#f16913", alpha = 0.6, size = 2) +
+ labs(
+  title = paste0(species, " - Width by Mass"),
+  x = "Mass (g)",
+  y = "Width (mm)"
+ ) +
+ theme_minimal(base_size = 12)
+
+# Save the scatterplot
+ggsave(
+ filename = file.path(figs_path, paste0(species, "_width_by_mass.png")),
+ plot = p_width_by_mass,
+ width = 7, height = 5, dpi = 300
+)
+
+message("Scatterplots saved to: ", figs_path)
+``
 
